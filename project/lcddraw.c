@@ -99,18 +99,19 @@ void drawChar8x12(u_char rcol, u_char rrow, char c,
 {
   u_char col = 0;
   u_char row = 0;
-  u_char bit = 0x01;
+  int bit = 128;
   u_char oc = c - 0x20;
 
   lcd_setArea(rcol, rrow, rcol + 7, rrow + 12); /* relative to requested col/row */
   while (row < 13) {
     while (col < 8) {
-      u_int colorBGR = (font_8x12[oc][col] & bit) ? fgColorBGR : bgColorBGR;
+      u_int colorBGR = (font_8x12[oc][row] & bit) ? fgColorBGR : bgColorBGR;
       lcd_writeColor(colorBGR);
+      bit >>= 1;
       col++;
     }
+    bit = 128;
     col = 0;
-    bit <<= 1;
     row++;
   }
 }
