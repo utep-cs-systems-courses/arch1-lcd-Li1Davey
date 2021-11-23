@@ -16,7 +16,7 @@ void led_init(){
 }
 
 short redrawScreen = 1;
-short rad = 20;
+short rad = 0;
 
 void wdt_c_handler()
 {
@@ -62,12 +62,13 @@ void __interrupt_vec(WDT_VECTOR) WDT()	/* 250 interrupts/sec */
 }
 
 void shape(){
+
   if(rad <= 50){
     circle(rad);
     rad += 5;
   }
   else{
     clearScreen(COLOR_BLUE);
-    rad = 20;
+    rad = 0;
   }
 }
