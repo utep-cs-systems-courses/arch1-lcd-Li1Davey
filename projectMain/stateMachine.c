@@ -17,7 +17,11 @@ int indAma = 0;
 int holdAma = 0;
 
 void americaUpdate(){ //Play the America Song
-
+  /*
+  if(!indAma){
+  drawChar5x7(20, 20, "America", COLOR_WHITE, COLOR_RED);
+  }
+  */
   if(playAma > 1){
     playAma --;
   }
@@ -26,13 +30,13 @@ void americaUpdate(){ //Play the America Song
 
     playAma = 0;
 
-    if(americaNotes[indAma] > 0){ //Turns the Green LED on if buzzer cycle is not zero.
+    if(americaNote[indAma] > 0){ //Turns the Green LED on if buzzer cycle is not zero.
       lightControl(1);
     }
     else{
       lightControl(2); //Turns the Red LED on if the buzzer cycle is zero.
     }
-    buzzer_set_period(americaNotes[indAma]);
+    buzzer_set_period(americaNote[indAma]);
     holdAma = americaHold[indAma];
     indAma++;
   }
@@ -61,7 +65,6 @@ void americaCounter(){
     halfCountAma = 0;
   }
 }
-
 
 
 int halfCountHal = 0;

@@ -149,8 +149,7 @@ void drawChar11x16(u_char rcol, u_char rrow, char c,
  *  \param fgColorBGR Foreground color in BGR
  *  \param bgColorBGR Background color in BGR
  */
-void drawString5x7(u_char col, u_char row, char *string,
-		u_int fgColorBGR, u_int bgColorBGR)
+void drawString5x7(u_char col, u_char row, char *string, u_int fgColorBGR, u_int bgColorBGR)
 {
   u_char cols = col;
   while (*string) {
@@ -159,18 +158,16 @@ void drawString5x7(u_char col, u_char row, char *string,
   }
 }
 
-void drawString8x12(u_char col, u_char row, char *string,
-		u_int fgColorBGR, u_int bgColorBGR)
+void drawString8x12(u_char col, u_char row, char *string, u_int fgColorBGR, u_int bgColorBGR)
 {
   u_char cols = col;
   while (*string) {
     drawChar8x12(cols, row, *string++, fgColorBGR, bgColorBGR);
-    cols += 13;
+    cols += 9;
   }
 }
 
-void drawString11x16(u_char col, u_char row, char *string,
-		u_int fgColorBGR, u_int bgColorBGR)
+void drawString11x16(u_char col, u_char row, char *string, u_int fgColorBGR, u_int bgColorBGR)
 {
   u_char cols = col;
   while (*string) {

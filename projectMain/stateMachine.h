@@ -1,7 +1,7 @@
 #ifndef stateMachine_included
 #define stateMachine_included
 
-void wdt_c_handler();
+//void wdt_c_handler();
 void americaUpdate();
 void americaCounter();
 void halloweenUpdate();

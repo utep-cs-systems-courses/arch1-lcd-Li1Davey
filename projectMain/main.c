@@ -15,20 +15,20 @@ void led_init(){
   P1OUT &= ~LEDS;
 }
 
-short redrawScreen = 1;
-short rad = 0;
-
+//short redrawScreen = 0;
+//short rad = 0;
+/*
 void wdt_c_handler()
 {
   static int wdtCount = 0;
   wdtCount ++;
-  if (wdtCount >= 25) { //10/sec 
+  if (wdtCount >= 250) { //10/sec 
     wdtCount = 0;
     redrawScreen = 1;
   }
 }
-
-void shape();
+*/
+ //void shape();
 
 int main() { // Initialize everything at the start
   //clearScreen(COLOR_BLUE);
@@ -40,27 +40,31 @@ int main() { // Initialize everything at the start
     configureClocks();
     enableWDTInterrupts();
 
-    or_sr(0x8);          // CPU off, GIE on
-    
     clearScreen(COLOR_BLUE);
+    //drawString5x7(20,20, "hello", COLOR_GREEN, COLOR_RED);
     
-    while (1) {/* forever */
+    or_sr(0x18); // CPU off, GIE on
+    
+    
+    /*
+    while (1) {// forever 
 
       if (redrawScreen) {
 	redrawScreen = 0;
-        shape();
+        //shape();
       }
       
-      or_sr(0x10);/**< CPU OFF */
+      //or_sr(0x10);//< CPU OFF 
       
     }
+    */
 }
 
 void __interrupt_vec(WDT_VECTOR) WDT()	/* 250 interrupts/sec */
 {
     timeSM();
 }
-
+/*
 void shape(){
 
   if(rad <= 50){
@@ -72,3 +76,4 @@ void shape(){
     rad = 0;
   }
 }
+*/
