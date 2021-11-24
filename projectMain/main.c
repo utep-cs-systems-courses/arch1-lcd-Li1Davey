@@ -41,8 +41,11 @@ int main() { // Initialize everything at the start
     enableWDTInterrupts();
 
     clearScreen(COLOR_BLUE);
-    //drawString5x7(20,20, "hello", COLOR_GREEN, COLOR_RED);
-    
+    drawString8x12(10,20, "S1:America", COLOR_WHITE, COLOR_RED);
+    drawString8x12(10,40, "S2:Halloween", COLOR_WHITE, COLOR_RED);
+    drawString8x12(10,60, "S3:Solfege", COLOR_WHITE, COLOR_RED);
+    drawString8x12(10,80, "S4:Reset", COLOR_WHITE, COLOR_RED);
+   
     or_sr(0x18); // CPU off, GIE on
     
     
