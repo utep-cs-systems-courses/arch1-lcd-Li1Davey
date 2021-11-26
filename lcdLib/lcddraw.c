@@ -11,6 +11,30 @@
  *  \param row Row to draw to
  *  \param colorBGR Color of pixel in BGR
  */
+
+
+void circle(short radius, u_int colorBGR){
+
+  short centerR = LONG_EDGE_PIXELS/2; // Center coordinate for the rows
+  short centerC = SHORT_EDGE_PIXELS/2; //Center coordinate for the columns
+  
+  for (short col = radius; col >= 0 ; col--){
+    for (short row = radius; row >= 0; row--){
+      short pow2col = col * col;
+      short pow2row = row * row;
+      short total = pow2col + pow2row;
+      short radiusSqu = radius * radius;
+      if(total <= radiusSqu){
+	drawPixel(centerC+col, centerR+row, colorBGR);
+	drawPixel(centerC+col, centerR-row, colorBGR);
+	drawPixel(centerC-col, centerR+row, colorBGR);
+	drawPixel(centerC-col, centerR-row, colorBGR);
+      }
+    }
+  }
+
+}
+
 void drawPixel(u_char col, u_char row, u_int colorBGR) 
 {
   lcd_setArea(col, row, col, row);
@@ -72,6 +96,49 @@ void drawChar5x7(u_char rcol, u_char rrow, char c,
   }
 }
 
+void drawChar8x12(u_char rcol, u_char rrow, char c, 
+     u_int fgColorBGR, u_int bgColorBGR) 
+{
+  u_char col = 0;
+  u_char row = 0;
+  int bit = 128;
+  u_char oc = c - 0x20;
+
+  lcd_setArea(rcol, rrow, rcol + 7, rrow + 12); /* relative to requested col/row */
+  while (row < 13) {
+    while (col < 8) {
+      u_int colorBGR = (font_8x12[oc][row] & bit) ? fgColorBGR : bgColorBGR;
+      lcd_writeColor(colorBGR);
+      bit >>= 1;
+      col++;
+    }
+    bit = 128;
+    col = 0;
+    row++;
+  }
+}
+
+void drawChar11x16(u_char rcol, u_char rrow, char c, 
+     u_int fgColorBGR, u_int bgColorBGR) 
+{
+  u_char col = 0;
+  u_char row = 0;
+  int bit = 1;
+  u_char oc = c - 0x20;
+
+  lcd_setArea(rcol, rrow, rcol + 10, rrow + 16); /* relative to requested col/row */
+  while (row < 17) {
+    while (col < 11) {
+      u_int colorBGR = (font_11x16[oc][col] & bit) ? fgColorBGR : bgColorBGR;
+      lcd_writeColor(colorBGR);
+      col++;
+    }
+    col = 0;
+    bit <<= 1;
+    row++;
+  }
+}
+   
 /** Draw string at col,row
  *  Type:
  *  FONT_SM - small (5x8,) FONT_MD - medium (8x12,) FONT_LG - large (11x16)
@@ -84,8 +151,7 @@ void drawChar5x7(u_char rcol, u_char rrow, char c,
  *  \param fgColorBGR Foreground color in BGR
  *  \param bgColorBGR Background color in BGR
  */
-void drawString5x7(u_char col, u_char row, char *string,
-		u_int fgColorBGR, u_int bgColorBGR)
+void drawString5x7(u_char col, u_char row, char *string, u_int fgColorBGR, u_int bgColorBGR)
 {
   u_char cols = col;
   while (*string) {
@@ -94,6 +160,23 @@ void drawString5x7(u_char col, u_char row, char *string,
   }
 }
 
+void drawString8x12(u_char col, u_char row, char *string, u_int fgColorBGR, u_int bgColorBGR)
+{
+  u_char cols = col;
+  while (*string) {
+    drawChar8x12(cols, row, *string++, fgColorBGR, bgColorBGR);
+    cols += 9;
+  }
+}
+
+void drawString11x16(u_char col, u_char row, char *string, u_int fgColorBGR, u_int bgColorBGR)
+{
+  u_char cols = col;
+  while (*string) {
+    drawChar11x16(cols, row, *string++, fgColorBGR, bgColorBGR);
+    cols += 12;
+  }
+}
 
 /** Draw rectangle outline
  *  
