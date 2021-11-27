@@ -15,6 +15,20 @@
 
 #define SWITCHES 15
 
+short redrawScreen = 0;
+int switches = 0;
+int press = 0;
+int cpuOff = 0;
+
+void draw_default();
+void update_shape();
+void update_restart();
+void update_clear();
+
+void normalTime();
+void blinkCounter();
+void blinkUpdate();
+
 void led_init(){
   P1DIR |= LEDS;
   P1OUT &= ~LEDS;
@@ -39,10 +53,6 @@ switch_init()/* setup switch */
   P2DIR &= ~SWITCHES;/* set switches' bits for input */
   switch_update_interrupt_sense();
 }
-
-short redrawScreen = 0;
-int switches = 0;
-int press = 0;
 
 void
 switch_interrupt_handler()
@@ -81,14 +91,6 @@ void wdt_c_handler()
 
 int doReMi[] = {6802, 6060, 5405, 5102, 4545, 4049, 3610, 3407};
 
-void draw_default();
-void update_shape();
-void update_restart();
-
-void normalTime();
-void blinkCounter();
-void blinkUpdate();
-
 void main()
 {
   configureClocks();
@@ -106,9 +108,10 @@ void main()
       redrawScreen = 0;
       update_shape();
     }
-    //lightControl(2);
+    //lightControl(0);
     //P1OUT &= ~LED;/* led off */
     or_sr(0x10);/**< CPU OFF */
+    //lightControl(2);
     //P1OUT |= LED;/* led on */
   }
 }
@@ -166,9 +169,16 @@ int secCount = 0;
 
 void normalTime(){
   secCount ++;
-  if (secCount >= 25) {/* 10/sec */
+  if (secCount >= 15) {/* 10/sec */
+    if(!cpuOff){
     secCount = 0;
     redrawScreen = 1;
+    }
+    else{
+      secCount = 0;
+      redrawScreen = 0;
+      cpuOff = 0;
+    }
   }
 }
 
@@ -182,7 +192,12 @@ void blinkUpdate(){
   if (blinkCount >= blinkLimit && doReMi[blinkLimit] > 0) {
     blinkCount = 0;
     buzzer_set_period(doReMi[blinkLimit]);
-    lightControl(1);
+    if(!getDim){
+      lightControl(1);
+    }
+    else{
+      lightControl(2);
+    }
   }
   else{
     lightControl(0);
@@ -216,16 +231,30 @@ void stopUpdates(){ //Turns off the buzzer and LEDs and reutrns all initial vari
   blinkCount = 0;
   blinkLimit = 0;
   getDim = 0;
-
-  redrawScreen = 0;
   
   buzzer_set_period(0);
   lightControl(0);
   press = 0;
   step = 0;
+  cpuOff = 1;
   update_restart();
-  
+}
 
+void update_clear(){
+  secondCount = 0;
+  blinkCount = 0;
+  blinkLimit = 0;
+  getDim = 0;
+
+  if(press == 0 || press > 2){
+    step = 0;
+  }
+  press = 0;
+  cpuOff = 1;
+  clearScreen(COLOR_BLUE);
+  buzzer_set_period(0);
+  lightControl(0);
+  
 }
 
 void timeSM(){
