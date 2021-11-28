@@ -41,6 +41,6 @@ WDT:
 	POP	R15
 	cmp	#0, &redrawScreen
 	jz	dont_wake
-	and	#0xffef, 0(r1)	; clear CPU off in saved SR
+	and	#0xffef, 0(r1)	;clear CPU off in saved SR
 dont_wake:
 	RETI			;pop sr & pc
