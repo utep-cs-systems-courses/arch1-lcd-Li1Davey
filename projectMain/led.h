@@ -5,6 +5,6 @@
 #define LED_GREEN BIT6             // P1.6
 #define LEDS (BIT0 | BIT6)         // Both P1.0 and P1.6
 
-void lightControl(int trig);
+void lightControl(int trig);       // trig is located in r12
 
 #endif
